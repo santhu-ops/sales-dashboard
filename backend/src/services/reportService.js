@@ -8,7 +8,7 @@ const generateRevenueExcel = async (deals, accounts) => {
   workbook.created = new Date();
   workbook.modified = new Date();
 
-  // 1. Deals Sheet
+
   const dealsSheet = workbook.addWorksheet('Deals Pipeline');
   dealsSheet.columns = [
     { header: 'Deal Title', key: 'title', width: 40 },
@@ -19,12 +19,12 @@ const generateRevenueExcel = async (deals, accounts) => {
     { header: 'Created Date', key: 'createdAt', width: 20 }
   ];
 
-  // Format headers for Deals Sheet
+
   dealsSheet.getRow(1).font = { name: 'Arial', family: 4, size: 11, bold: true, color: { argb: 'FFFFFF' } };
   dealsSheet.getRow(1).fill = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: { argb: '4F46E5' } // Brand Purple
+    fgColor: { argb: '4F46E5' }
   };
 
   deals.forEach(deal => {
@@ -38,14 +38,14 @@ const generateRevenueExcel = async (deals, accounts) => {
     });
   });
 
-  // Alignments and number formats
+
   dealsSheet.getColumn('value').numFmt = '$#,##0.00';
   dealsSheet.getColumn('probability').numFmt = '0"%"';
   dealsSheet.getColumn('value').alignment = { horizontal: 'right' };
   dealsSheet.getColumn('probability').alignment = { horizontal: 'center' };
   dealsSheet.getColumn('stage').alignment = { horizontal: 'center' };
 
-  // 2. Accounts Sheet
+
   const accountsSheet = workbook.addWorksheet('Customer Accounts');
   accountsSheet.columns = [
     { header: 'Company Name', key: 'companyName', width: 30 },
@@ -55,12 +55,12 @@ const generateRevenueExcel = async (deals, accounts) => {
     { header: 'Churn Risk', key: 'churnRisk', width: 15 }
   ];
 
-  // Format headers for Accounts Sheet
+
   accountsSheet.getRow(1).font = { name: 'Arial', family: 4, size: 11, bold: true, color: { argb: 'FFFFFF' } };
   accountsSheet.getRow(1).fill = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: { argb: '0F172A' } // Slate-900
+    fgColor: { argb: '0F172A' } /
   };
 
   accounts.forEach(account => {
@@ -76,7 +76,7 @@ const generateRevenueExcel = async (deals, accounts) => {
   accountsSheet.getColumn('healthScore').alignment = { horizontal: 'center' };
   accountsSheet.getColumn('churnRisk').alignment = { horizontal: 'center' };
 
-  // Write workbook to buffer
+
   const buffer = await workbook.xlsx.writeBuffer();
   return buffer;
 };
