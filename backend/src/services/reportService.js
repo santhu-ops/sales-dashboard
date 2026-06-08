@@ -60,7 +60,7 @@ const generateRevenueExcel = async (deals, accounts) => {
   accountsSheet.getRow(1).fill = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: { argb: '0F172A' } /
+    fgColor: { argb: '0F172A' }
   };
 
   accounts.forEach(account => {
