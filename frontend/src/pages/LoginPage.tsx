@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, BarChart2 } from 'lucide-react';
+import { TrendingUp, Mail, Lock, Eye, EyeOff, ArrowRight, BarChart3, Users, Zap } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
         showToast('Please verify your email. An OTP has been sent.', 'info');
         navigate('/verify-otp', { state: { email: result.email } });
       } else {
-        showToast('Welcome back to GWC Workspace!', 'success');
+        showToast('Welcome back to SalesFlow!', 'success');
         navigate('/dashboard');
       }
     } catch (err: any) {
@@ -48,157 +48,106 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleQuickAnalysis = () => {
-    showToast('Entering guest view for Sales Analysis...', 'info');
-    navigate('/dashboard');
-  };
-
   return (
-    <div className="min-h-screen bg-[#f3ebf8] flex items-center justify-center p-4 lg:p-8">
-      {/* Premium Split Layout Wrapper */}
-      <div className="w-full max-w-5xl bg-white/40 backdrop-blur-md rounded-[2.5rem] shadow-[0_24px_60px_-12px_rgba(111,43,139,0.15)] p-4 lg:p-6 flex flex-col lg:flex-row items-stretch gap-6">
-        
-        {/* Left Side: Illustration Container */}
-        <div className="hidden lg:flex lg:w-1/2 relative rounded-[2rem] overflow-hidden min-h-[500px]">
-          <img 
-            src="/illustration.png" 
-            alt="GWC Data Workspace" 
-            className="absolute inset-0 w-full h-full object-cover rounded-[2rem]" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#6f2b8b]/40 to-transparent pointer-events-none rounded-[2rem]" />
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#e4efd2] p-6 lg:p-12 overflow-hidden relative">
 
-        {/* Right Side: Form Card */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="w-full bg-white rounded-[2rem] px-8 py-10 lg:px-12 lg:py-12 shadow-sm flex flex-col justify-center min-h-[500px]"
-          >
-            {/* GWC Brand Logo */}
-            <div className="flex items-center justify-center gap-2 mb-8">
-              <div className="flex items-center gap-1.5 font-black text-xl tracking-tight text-[#262626]">
-                <div className="flex gap-0.5 items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6f2b8b] to-[#b56dd3] text-white font-extrabold text-sm">
-                  G
-                </div>
-                <span>GWC <span className="text-[#6f2b8b]">DATA.AI</span></span>
-              </div>
+      {/* Background image / illustration container */}
+      <div className="absolute inset-y-0 left-0 w-full lg:w-[60%] flex items-center justify-center p-8 z-0">
+        <img
+          src="/illustration.png"
+          alt="3D Illustration"
+          className="w-full h-full object-cover rounded-3xl opacity-90 shadow-xl"
+        />
+      </div>
+
+      {/* Floating White Card */}
+      <div className="w-full h-full max-w-6xl flex justify-end relative z-10">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md bg-white rounded-[2.5rem] p-10 lg:p-12 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] flex flex-col justify-center my-auto min-h-[600px]"
+        >
+          {/* Logo */}
+          <div className="flex items-center justify-center gap-2 mb-10">
+            <div className="w-5 h-5 bg-[#96ce54] rounded-sm flex items-center justify-center text-white rotate-45">
+              <div className="w-2 h-2 bg-white rounded-full -rotate-45" />
+            </div>
+            <span className="text-xl font-bold text-slate-800 tracking-tight">salesflow</span>
+          </div>
+
+          {/* Heading */}
+          <div className="text-center mb-8">
+            <h1 className="text-[2.25rem] font-extrabold text-[#3a3f36] tracking-tight leading-[1.1]">
+              Sign in to<br />workspace
+            </h1>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <input
+                type="email"
+                {...register('email')}
+                className="w-full px-5 py-3.5 rounded-full border border-slate-200 bg-white text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#96ce54] focus:ring-1 focus:ring-[#96ce54] transition-colors"
+                placeholder="Email address"
+              />
+              {errors.email && <p className="text-xs text-rose-500 font-semibold mt-1 px-4">{errors.email.message}</p>}
             </div>
 
-            {/* Heading */}
-            <div className="text-center mb-6">
-              <h1 className="text-[2rem] font-extrabold text-slate-800 tracking-tight leading-[1.15] mb-1.5">
-                Sign in to workspace
-              </h1>
-              <p className="text-[13px] text-slate-500">
-                GWC Enterprise AI &amp; Sales Workspace
-              </p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              
-              {/* Email Field */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 mb-1.5 pl-1">
-                  Email address
-                </label>
-                <div className="relative">
-                  <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                  <input
-                    type="email"
-                    {...register('email')}
-                    className={`w-full pl-10 pr-4 py-3.5 rounded-2xl border text-sm text-slate-800 bg-white placeholder:text-slate-400 focus:outline-none transition-all ${
-                      errors.email
-                        ? 'border-rose-400 focus:border-rose-400 focus:ring-2 focus:ring-rose-400/20'
-                        : 'border-slate-200 focus:border-[#6f2b8b] focus:ring-2 focus:ring-[#6f2b8b]/20'
-                    }`}
-                    placeholder="you@gwcdata.ai"
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-xs text-rose-500 font-semibold mt-1.5 pl-1">{errors.email.message}</p>
-                )}
+            <div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  {...register('password')}
+                  className="w-full px-5 py-3.5 rounded-full border border-slate-200 bg-white text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#96ce54] focus:ring-1 focus:ring-[#96ce54] transition-colors"
+                  placeholder="Password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
               </div>
-
-              {/* Password Field */}
-              <div>
-                <div className="flex items-center justify-between mb-1.5 pl-1">
-                  <label className="block text-xs font-bold text-slate-600">
-                    Password
-                  </label>
-                  <Link 
-                    to="/forgot-password" 
-                    className="text-[11px] font-bold text-[#6f2b8b] hover:text-[#5b2074] transition-colors cursor-pointer"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-                <div className="relative">
-                  <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    {...register('password')}
-                    className={`w-full pl-10 pr-11 py-3.5 rounded-2xl border text-sm text-slate-800 bg-white placeholder:text-slate-400 focus:outline-none transition-all ${
-                      errors.password
-                        ? 'border-rose-400 focus:border-rose-400 focus:ring-2 focus:ring-rose-400/20'
-                        : 'border-slate-200 focus:border-[#6f2b8b] focus:ring-2 focus:ring-[#6f2b8b]/20'
-                    }`}
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="text-xs text-rose-500 font-semibold mt-1.5 pl-1">{errors.password.message}</p>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isFormSubmitting}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#6f2b8b] to-[#b56dd3] hover:opacity-95 active:scale-[0.98] text-white font-bold text-sm transition-all mt-3 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-[#6f2b8b]/20"
-              >
-                {isFormSubmitting ? (
-                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="flex items-center justify-between mt-1.5 px-4">
+                {errors.password ? (
+                  <p className="text-xs text-rose-500 font-semibold">{errors.password.message}</p>
                 ) : (
-                  <>Sign in <ArrowRight size={15} /></>
+                  <div />
                 )}
-              </button>
-            </form>
-
-            {/* Quick Access Link / Sales Dashboard details analysis link */}
-            <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col items-center">
-              <button
-                type="button"
-                onClick={handleQuickAnalysis}
-                className="w-full py-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <BarChart2 size={14} className="text-[#6f2b8b]" />
-                Sales Dashboard Details Analysis
-              </button>
+                <Link to="/forgot-password" className="text-xs font-semibold text-[#83b547] hover:text-[#729e3e] transition-colors">
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
-            {/* Bottom prompts */}
-            <p className="text-center text-[10px] text-slate-400 mt-6 leading-relaxed">
-              By signing in you agree to GWC's <br />
-              <span className="font-semibold text-[#6f2b8b]">Terms of Services</span> and <span className="font-semibold text-[#6f2b8b]">Privacy Policy</span>.
-            </p>
+            <button
+              type="submit"
+              disabled={isFormSubmitting}
+              className="w-full py-3.5 rounded-full bg-[#96ce54] hover:bg-[#86b94a] text-slate-900 font-bold text-sm transition-colors mt-2"
+            >
+              {isFormSubmitting ? (
+                <span className="w-5 h-5 border-2 border-slate-800/30 border-t-slate-800 rounded-full animate-spin inline-block align-middle" />
+              ) : (
+                "Sign in"
+              )}
+            </button>
+          </form>
 
-            <p className="text-center text-xs text-slate-400 mt-5 font-medium">
-              Don't have an account? <Link to="/register" className="font-bold text-[#6f2b8b] hover:underline">Register</Link>
-            </p>
-          </motion.div>
-        </div>
 
+
+          <p className="text-center text-[9px] text-slate-400 mt-8 leading-relaxed px-4">
+            By signing in you agree to SalesFlow's <br />
+            <span className="font-semibold text-[#83b547]">Terms of Services</span> and <span className="font-semibold text-[#83b547]">Privacy Policy</span>.
+          </p>
+
+          <p className="text-center text-xs text-slate-400 mt-6 font-medium">
+            Don't have an account? <Link to="/register" className="font-bold text-[#83b547]">Register</Link>
+          </p>
+
+        </motion.div>
       </div>
     </div>
   );

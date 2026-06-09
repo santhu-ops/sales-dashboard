@@ -154,11 +154,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <div className="p-3 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/30 dark:bg-slate-900/30">
         {!collapsed ? (
           <div className="flex items-center gap-3 px-1">
-            <img
-              src={(user as any)?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'}
-              alt={user?.name}
-              className="w-8 h-8 rounded-full border border-slate-100 object-cover"
-            />
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#6f2b8b] to-[#b56dd3] flex items-center justify-center text-white text-sm font-black flex-shrink-0 shadow-md shadow-[#6f2b8b]/20 select-none">
+              {user?.name?.charAt(0).toUpperCase() ?? '?'}
+            </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-slate-800 dark:text-white truncate leading-tight">{user?.name}</p>
               <p className="text-[9px] text-slate-400 capitalize truncate font-semibold mt-0.5">{user?.role}</p>
@@ -173,11 +171,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
-            <img
-              src={(user as any)?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'}
-              alt={user?.name}
-              className="w-8 h-8 rounded-full border border-slate-100 object-cover"
-            />
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#6f2b8b] to-[#b56dd3] flex items-center justify-center text-white text-sm font-black flex-shrink-0 shadow-md shadow-[#6f2b8b]/20 select-none">
+              {user?.name?.charAt(0).toUpperCase() ?? '?'}
+            </div>
             <button
               onClick={handleLogout}
               className="w-full flex justify-center p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-all cursor-pointer"
@@ -273,11 +269,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
             {/* Profile Pill */}
             <div className="flex items-center gap-2 bg-white dark:bg-slate-900 rounded-full pl-1.5 pr-4.5 py-1.5 shadow-sm border border-slate-100 dark:border-slate-800/80 hidden sm:flex">
-              <img
-                src={(user as any)?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'}
-                alt={user?.name}
-                className="w-7 h-7 rounded-full border border-slate-100 dark:border-slate-800 object-cover shadow-sm"
-              />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#6f2b8b] to-[#b56dd3] flex items-center justify-center text-white text-xs font-black flex-shrink-0 shadow-sm select-none">
+                {user?.name?.charAt(0).toUpperCase() ?? '?'}
+              </div>
               <div className="text-left">
                 <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 block leading-tight">{user?.name}</span>
                 <span className="text-[9px] text-slate-400 font-semibold block leading-none">{user?.role === 'admin' ? 'Admin store' : 'Store employee'}</span>

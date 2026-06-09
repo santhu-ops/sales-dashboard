@@ -103,7 +103,7 @@ const CustomersPage: React.FC = () => {
         </button>
       </motion.div>
 
-      {/* Stats Strip */}
+    
       <div className="flex items-center gap-4 flex-wrap">
         <div className="glass-card px-4 py-3 flex items-center gap-2">
           <Users size={14} className="text-brand-400" />

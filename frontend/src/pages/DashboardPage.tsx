@@ -3,7 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
   DollarSign, TrendingUp, Calendar, RefreshCw, AlertCircle,
-  ShoppingBag, Users, Package, Award, Clock, ArrowUpRight, ArrowDownRight, FileText
+  ShoppingBag, Users, Package, Award, Clock, ArrowUpRight, ArrowDownRight, FileText,
+  Target, CheckCircle2, Zap, Star
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -491,6 +492,204 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* ── Section 4: Sales Goals & Milestones ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="space-y-4"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-slate-800 dark:text-white tracking-tight flex items-center gap-2">
+              <Target size={16} className="text-[#6f2b8b]" />
+              Sales Goals & Milestones
+            </h3>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
+              Track your quarterly targets — updated in real time
+            </p>
+          </div>
+          <span className="text-[10px] font-bold text-[#6f2b8b] dark:text-[#b56dd3] bg-purple-50 dark:bg-purple-950/20 px-3 py-1 rounded-full border border-purple-100 dark:border-purple-900/40">
+            Q{Math.ceil((new Date().getMonth() + 1) / 3)} {new Date().getFullYear()}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+          {/* ── Goal Ring 1: Revenue ── */}
+          <GoalRingCard
+            label="Revenue Goal"
+            sublabel="Quarterly Target"
+            actual={metrics?.totalRevenue ?? 0}
+            target={500000}
+            color="#6f2b8b"
+            trackColor="#ede9fe"
+            darkTrackColor="#3b0764"
+            formatValue={(v) => fmtCurrency(v)}
+            icon={<DollarSign size={14} className="text-[#6f2b8b]" />}
+            isLoading={isLoading}
+          />
+
+          {/* ── Goal Ring 2: Customers ── */}
+          <GoalRingCard
+            label="Customer Goal"
+            sublabel="Active Customers Target"
+            actual={metrics?.activeCustomers ?? 0}
+            target={50}
+            color="#0ea5e9"
+            trackColor="#e0f2fe"
+            darkTrackColor="#0c4a6e"
+            formatValue={(v) => fmtNumber(v)}
+            icon={<Users size={14} className="text-sky-500" />}
+            isLoading={isLoading}
+          />
+
+          {/* ── Goal Ring 3: Sales Count ── */}
+          <GoalRingCard
+            label="Sales Closed"
+            sublabel="Completed Transactions Target"
+            actual={metrics?.completedSalesCount ?? 0}
+            target={30}
+            color="#10b981"
+            trackColor="#d1fae5"
+            darkTrackColor="#064e3b"
+            formatValue={(v) => fmtNumber(v)}
+            icon={<ShoppingBag size={14} className="text-emerald-500" />}
+            isLoading={isLoading}
+          />
+        </div>
+
+        {/* ── Milestone Badges Strip ── */}
+        <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-5 border border-slate-100 dark:border-slate-800/80 shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <Star size={14} className="text-amber-400" />
+            <span className="text-xs font-bold text-slate-700 dark:text-white uppercase tracking-wider">Milestones Achieved</span>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { label: 'First Sale', desc: 'Recorded first completed sale', met: (metrics?.completedSalesCount ?? 0) >= 1, color: 'emerald' },
+              { label: '5 Customers', desc: 'Reached 5 active customers', met: (metrics?.activeCustomers ?? 0) >= 5, color: 'sky' },
+              { label: '$50K Revenue', desc: 'Hit $50,000 in total revenue', met: (metrics?.totalRevenue ?? 0) >= 50000, color: 'violet' },
+              { label: '10 Sales', desc: 'Completed 10 transactions', met: (metrics?.completedSalesCount ?? 0) >= 10, color: 'amber' },
+              { label: '$100K Revenue', desc: 'Hit $100,000 in total revenue', met: (metrics?.totalRevenue ?? 0) >= 100000, color: 'rose' },
+              { label: '20 Customers', desc: 'Reached 20 active customers', met: (metrics?.activeCustomers ?? 0) >= 20, color: 'indigo' },
+            ].map((milestone) => (
+              <div
+                key={milestone.label}
+                title={milestone.desc}
+                className={`flex items-center gap-2 px-3 py-2 rounded-2xl border text-xs font-bold transition-all ${
+                  milestone.met
+                    ? `bg-${milestone.color}-50 dark:bg-${milestone.color}-950/20 border-${milestone.color}-200 dark:border-${milestone.color}-900/40 text-${milestone.color}-700 dark:text-${milestone.color}-400`
+                    : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'
+                }`}
+              >
+                {milestone.met ? (
+                  <CheckCircle2 size={13} className={`text-${milestone.color}-500`} />
+                ) : (
+                  <div className="w-3 h-3 rounded-full border-2 border-slate-300 dark:border-slate-600" />
+                )}
+                {milestone.label}
+                {milestone.met && (
+                  <span className={`text-[9px] font-bold bg-${milestone.color}-100 dark:bg-${milestone.color}-900/30 px-1 rounded`}>✓</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+// ── GoalRingCard sub-component ──
+interface GoalRingCardProps {
+  label: string;
+  sublabel: string;
+  actual: number;
+  target: number;
+  color: string;
+  trackColor: string;
+  darkTrackColor: string;
+  formatValue: (v: number) => string;
+  icon: React.ReactNode;
+  isLoading: boolean;
+}
+
+const GoalRingCard: React.FC<GoalRingCardProps> = ({
+  label, sublabel, actual, target, color, trackColor, formatValue, icon, isLoading
+}) => {
+  const pct = Math.min(100, target > 0 ? Math.round((actual / target) * 100) : 0);
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (pct / 100) * circumference;
+  const status = pct >= 100 ? 'Achieved!' : pct >= 75 ? 'Almost there' : pct >= 50 ? 'On track' : 'Behind';
+  const statusColor = pct >= 100 ? '#10b981' : pct >= 75 ? '#f59e0b' : pct >= 50 ? '#0ea5e9' : '#f43f5e';
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-6 border border-slate-100 dark:border-slate-800/80 shadow-sm flex flex-col items-center gap-4">
+      {isLoading ? (
+        <div className="w-36 h-36 rounded-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
+      ) : (
+        <>
+          {/* SVG Ring */}
+          <div className="relative w-36 h-36 flex items-center justify-center">
+            <svg width="144" height="144" className="-rotate-90">
+              {/* Track */}
+              <circle cx="72" cy="72" r={radius} fill="none" stroke="#f1f5f9" strokeWidth="10" />
+              {/* Progress */}
+              <motion.circle
+                cx="72" cy="72" r={radius}
+                fill="none"
+                stroke={color}
+                strokeWidth="10"
+                strokeLinecap="round"
+                strokeDasharray={circumference}
+                initial={{ strokeDashoffset: circumference }}
+                animate={{ strokeDashoffset }}
+                transition={{ duration: 1.2, ease: 'easeOut' }}
+              />
+            </svg>
+            {/* Center Text */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-2xl font-extrabold text-slate-800 dark:text-white leading-none">{pct}%</span>
+              <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-1">of goal</span>
+            </div>
+          </div>
+
+          {/* Label & Values */}
+          <div className="text-center space-y-1.5 w-full">
+            <div className="flex items-center justify-center gap-1.5">
+              {icon}
+              <span className="text-sm font-bold text-slate-800 dark:text-white">{label}</span>
+            </div>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">{sublabel}</p>
+
+            <div className="flex items-center justify-between px-2 mt-3">
+              <div className="text-left">
+                <span className="text-[9px] text-slate-400 uppercase font-bold block">Actual</span>
+                <span className="text-sm font-extrabold text-slate-800 dark:text-white">{formatValue(actual)}</span>
+              </div>
+              <div className="text-right">
+                <span className="text-[9px] text-slate-400 uppercase font-bold block">Target</span>
+                <span className="text-sm font-extrabold text-slate-500 dark:text-slate-400">{formatValue(target)}</span>
+              </div>
+            </div>
+
+            {/* Status Badge */}
+            <div className="flex justify-center mt-2">
+              <span
+                className="flex items-center gap-1 text-[10px] font-bold px-3 py-1 rounded-full"
+                style={{ background: `${statusColor}18`, color: statusColor }}
+              >
+                {pct >= 100 ? <CheckCircle2 size={11} /> : <Zap size={11} />}
+                {status}
+              </span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
